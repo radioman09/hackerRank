@@ -1,4 +1,17 @@
 
+var data = `4
+1 1
+-1 1
+-1 -1
+1 -1
+5
+C 1 4
+X 2 4
+C 3 4
+Y 1 2
+C 1 3`
+
+
 void function processData(input) {
     input = input.split('\n')
     let quadrantsNum = input.shift()
