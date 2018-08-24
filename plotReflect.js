@@ -53,3 +53,14 @@ function getQuadrant(point) {
     if (point[0] > 0 && point[1] < 0) return 4
     return 0
 }
+
+// function reflect(query, arr) {
+//     query = query.split(" ")
+//     if (query[0] == "C") return arr
+//     let currentArr = []
+//     for (let i = query[1] - 1; i <= query[2] - 1; i++) {
+//         if (query[0] == "X") currentArr.push([arr[i][0], -arr[i][1]])
+//         if (query[0] == "Y") currentArr.push([-arr[i][0], arr[i][1]])
+//     }
+//     return currentArr
+// }
