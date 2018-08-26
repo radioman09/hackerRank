@@ -1,0 +1,22 @@
+{
+  "name": "hackerrank",
+  "version": "1.0.0",
+  "description": "",
+  "main": "occurance.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/radioman09/hackerRank.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/radioman09/hackerRank/issues"
+  },
+  "homepage": "https://github.com/radioman09/hackerRank#readme",
+  "devDependencies": {
+    "eslint-config-google": "^0.9.1"
+  }
+}

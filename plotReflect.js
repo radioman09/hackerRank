@@ -1,50 +1,48 @@
-var data = `4
-1 1
--1 1
--1 -1
-1 -1
-5
-C 1 4
-X 2 4
-C 3 4
-Y 1 2
-C 1 3`;
+'use strict';
+const fs = require('fs');
+const data = fs.readFileSync('./data.dat', 'utf-8');
 
-void (function processData(input) {
-  input = input.split("\n");
-  let quadrantsNum = input.shift();
-  let querysNum = input.splice(4, 1)[0];
+console.time('processData');
+processData(data);
+console.timeEnd('processData');
+
+function processData(input) {
+  input = input.split('\n');
+  const quadrantsNum = input.shift();
+  input.splice(quadrantsNum, 1);
   let quadrants = input.splice(0, quadrantsNum);
-  quadrants = quadrants.map(a => a.split(" "));
-  quadrants = quadrants.map(x => [+x[0], +x[1]]);
-  //   let original = quadrants.slice();
-  // console.log(quadrants);
-  for (let i of input) {
-    if (i.split(" ")[0] != "C") {
-      quadrants = reflect(i, quadrants);
-      //   console.log(quadrants)
+  input = input.map((x) => {
+    x = x.split(' ');
+    return [x[0], +x[1], +x[2]];
+  });
+  quadrants = quadrants.map((a) => a.split(' '));
+  quadrants = quadrants.map((x) => [+x[0], +x[1]]);
+
+  let dataOut = '';
+  for (let i = 0; i < input.length - 1; i++) {
+    if (input[i][0] === 'X' || input[i][0] === 'Y') {
+      reflect(...input[i], quadrants);
     } else {
-    //   console.log(getQuadNums(i, quadrants));
-      getOccurance(getQuadNums(i, quadrants));
+      dataOut += getOccurance(getQuadNums(input[i][1], input[i][2], quadrants)) + '\n';
     }
   }
-})(data);
+  // process.stdout.write(dataOut);
+}
 
-function reflect(query, arr) {
-  query = query.split(" ");
-  query[1] = +query[1] - 1;
-  query[2] = +query[2] - 1;
-  if (query[0] == "X")
-    return arr.map((x, i) => {
-      if (between(i, query[1], query[2])) return [x[0], -x[1]];
-      else return [x[0], x[1]];
-    });
-  if (query[0] == "Y")
-    return arr.map((x, i) => {
-      if (between(i, query[1], query[2])) return [-x[0], x[1]];
-      else return [x[0], x[1]];
-    });
-  return arr;
+function reflect(query, start, end, arr) {
+  if (query === 'C') return arr;
+  start--;
+  if (query === 'X') {
+    for (let i = start; i < end; i++) {
+      arr[i] = [arr[i][0], -arr[i][1]];
+    }
+  }
+
+  if (query === 'Y') {
+    for (let i = start; i < end; i++) {
+      arr[i] = [-arr[i][0], arr[i][1]];
+    }
+  }
 }
 
 function getQuadrant(point) {
@@ -55,35 +53,24 @@ function getQuadrant(point) {
   return 0;
 }
 
-function getQuadNums(query, arr) {
-  query = query.split(" ");
-  query[1] = +query[1] - 1;
-  query[2] = +query[2] - 1;
-  return arr.map((x, i) => {
-    if (between(i, query[1], query[2])) return getQuadrant([x[0], x[1]]);
-    else return 0;
-  });
+function getQuadNums(start, end, arr) {
+  start--;
+  let out = [];
+  for (let i = start; i < end; i++) {
+    out.push(getQuadrant(arr[i]));
+  }
+  return out;
 }
 
 function getOccurance(arr) {
-  let quadrantsNumsArr = [1, 2, 3, 4];
-  
+  const quad = [1, 2, 3, 4];
+  let out = [0, 0, 0, 0];
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < arr.length; j++) {
+      if (arr[j] === quad[i]) {
+        out[i]++;
+      }
+    }
+  }
+  return out.join(' ');
 }
-// function reflect(query, arr) {
-//   query = query.split(" ");
-//   query[1] = +query[1] - 1;
-//   query[2] = +query[2] - 1;
-//   if (query[0] == "C") return arr;
-//   let currentArr = [];
-//   for (let i = query[1]; i <= query[2] - 1; i++) {
-//     if (query[0] == "X") currentArr.push([arr[i][0], -arr[i][1]]);
-//     if (query[0] == "Y") currentArr.push([-arr[i][0], arr[i][1]]);
-//   }
-//   return currentArr;
-// }
-
-function between(number, start, end) {
-  return number >= Math.min(start, end) && number <= Math.max(start, end);
-}
-
-// console.log(between(3, 0, 3))

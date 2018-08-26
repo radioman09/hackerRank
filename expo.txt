@@ -44,3 +44,10 @@ is 4 found in x 1 times
           2        4      2         1 // quadrants
 x = [ {(-1, 1),(1, -1),(-1 ,1)} ,(1 ,1)]
 c =        1      2       3             // points
+
+
+reflect
+getQuadNums
+getOccurance
+
+ reflect(input[i][0], +input[i][1], +input[i][2], quadrants);
