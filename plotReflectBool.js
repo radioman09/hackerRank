@@ -2,16 +2,16 @@
 const fs = require('fs');
 const data = fs.readFileSync('./data.dat', 'utf-8');
 
-// console.time('processData');
-process.stdout.write(processData(data));
-// processData(data);
-// console.timeEnd('processData');
+console.time('processData');
+// process.stdout.write(processData(data));
+processData(data);
+console.timeEnd('processData');
 
 function processData(input) {
   let quadrants;
-  // console.time('parse');
-  ({quadrants, input} = parseData(input));
-  // console.timeEnd('parse');
+  console.time('parse');
+  ({ quadrants, input } = parseData(input));
+  console.timeEnd('parse');
   return transformData(input, quadrants);
 }
 
@@ -22,7 +22,7 @@ function parseData(input) {
   let quadrants = input.splice(0, quadrantsNum);
   input = splitQuery(input);
   quadrants = splitQuad(quadrants);
-  return {quadrants, input};
+  return { quadrants, input };
 }
 
 function transformData(input, quadrants) {
@@ -40,22 +40,23 @@ function transformData(input, quadrants) {
 function reflect(query, start, end, arr) {
   if (query === 'X') {
     for (let i = start; i < end; i++) {
-      arr[i][1] = -arr[i][1];
+      arr[i][1] = !arr[i][1];
     }
-  } else if (query === 'Y') {
+  }
+
+  if (query === 'Y') {
     for (let i = start; i < end; i++) {
-      arr[i][0] = -arr[i][0];
+      arr[i][0] = !arr[i][0];
     }
   }
 }
-
 
 function splitQuad(data) {
   let contain = [];
   let segment;
   for (let i = 0; i < data.length; i++) {
     segment = data[i].split(' ');
-    contain.push([+segment[0] > 0 ? 1 : -1, +segment[1] > 0 ? 1 : -1]);
+    contain.push([+segment[0] > 0 ? true : false, +segment[1] > 0 ? true : false]);
   }
   return contain;
 }
@@ -76,13 +77,13 @@ function getOccurance(start, end, arr) {
   let q3 = 0;
   let q4 = 0;
   for (let i = start; i < end; i++) {
-    if (arr[i][0] > 0 && arr[i][1] > 0) {
+    if (arr[i][0] === true && arr[i][1] == true) {
       q1++;
-    } else if (arr[i][0] < 0 && arr[i][1] > 0) {
+    } else if (arr[i][0] === false && arr[i][1] === true) {
       q2++;
-    } else if (arr[i][0] < 0 && arr[i][1] < 0) {
+    } else if (arr[i][0] === false && arr[i][1] === false) {
       q3++;
-    } else if (arr[i][0] > 0 && arr[i][1] < 0) {
+    } else if (arr[i][0] === true && arr[i][1] === false) {
       q4++;
     }
   }
