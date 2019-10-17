@@ -52,17 +52,17 @@ function reflect(query, start, end, arr) {
 }
 
 function splitQuad(data) {
-  let contain = [];
+  const contain = [];
   let segment;
   for (let i = 0; i < data.length; i++) {
     segment = data[i].split(' ');
-    contain.push([+segment[0] > 0 ? true : false, +segment[1] > 0 ? true : false]);
+    contain.push([+segment[0] > 0, +segment[1] > 0]);
   }
   return contain;
 }
 
 function splitQuery(data) {
-  let contain = [];
+  const contain = [];
   let segment;
   for (let i = 0; i < data.length; i++) {
     segment = data[i].split(' ');
@@ -72,22 +72,14 @@ function splitQuery(data) {
 }
 
 function getOccurance(start, end, arr) {
-  let q1 = 0;
-  let q2 = 0;
-  let q3 = 0;
-  let q4 = 0;
-  for (let i = start; i < end; i++) {
-    if (arr[i][0] === true && arr[i][1] == true) {
-      q1++;
-    } else if (arr[i][0] === false && arr[i][1] === true) {
-      q2++;
-    } else if (arr[i][0] === false && arr[i][1] === false) {
-      q3++;
-    } else if (arr[i][0] === true && arr[i][1] === false) {
-      q4++;
-    }
+  let q1 = 0 , q2 = 0 , q3 = 0 , q4 = 0;
+  while (start < end) {
+    if (arr[start][0] && arr[start][1]) q1++;
+    else if (!arr[start][0] && arr[start][1]) q2++;
+    else if (!arr[start][0] && !arr[start][1]) q3++;
+    else if (arr[start][0] && !arr[start][1]) q4++;
+    start++
   }
-
   return `${q1} ${q2} ${q3} ${q4}`;
 }
 
